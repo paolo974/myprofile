@@ -1,0 +1,18 @@
+ mkdir -p /tmp/tmux-install; cd /tmp/tmux-install
+ wget https://github.com/downloads/libevent/libevent/libevent-2.0.21-stable.tar.gz
+ tar xzvf libevent-2.0.21-stable.tar.gz
+ cd libevent-2.0.21-stable
+ ./configure && make
+ sudo make install
+
+# on CentOS
+ sudo yum install -y ncurses-devel
+
+cd ..
+ # clone the latest stable master branch version
+ git clone https://github.com/tmux/tmux.git
+ cd tmux/
+ sh autogen.sh
+ ./configure && make
+
+ ./tmux -V

@@ -1,0 +1,62 @@
+
+
+#yum install -y wget httpd php gcc glibc glibc-common gd gd-devel make net-snmp unzip
+NAG_INSTALL=/app/nagios
+cd
+wget https://assets.nagios.com/downloads/nagioscore/releases/nagios-4.3.2.tar.gz
+tar -xzvf nagios-4.3.2.tar.gz 
+cd nagios-4.3.2
+
+useradd nagios
+groupadd nagcmd
+usermod -a -G nagcmd nagios
+usermod -a -G nagcmd apache
+
+./configure --prefix=$NAG_INSTALL --with-command-group=nagcmd --with-mail=/usr/bin/sendmail 
+
+make all
+make install
+make install-init
+make install-config
+make install-commandmode
+make install-webconf
+
+cp -ufR contrib/eventhandlers/ $NAG_INSTALL/libexec/
+
+chown -R nagios:nagios $NAG_INSTALL/libexec/eventhandlers
+
+$NAG_INSTALL/bin/nagios -v $NAG_INSTALL/etc/nagios.cfg
+
+cd
+rm -rf nagios-4.3.2 nagios-4.3.2.tar.gz
+
+wget http://www.nagios-plugins.org/download/nagios-plugins-2.1.1.tar.gz
+tar -zxvf nagios-plugins-2.1.1.tar.gz
+cd nagios-plugins-2.1.1
+./configure --with-nagios-user=nagios --with-nagios-group=nagios --prefix=$NAG_INSTALL
+make all
+make install
+cd
+rm -rf nagios-plugins-2.1.1 nagios-plugins-2.1.1.tar.gz
+
+
+cd
+#yum install libstdc++-static 
+#yum install -y make gcc-c++
+wget 'http://www.mathias-kettner.de/download/mk-livestatus-1.2.8.tar.gz'
+tar xzf mk-livestatus-1.2.8.tar.gz
+cd mk-livestatus-1.2.8
+./configure --with-nagios4 --prefix=$NAG_INSTALL
+make -j 4
+make install
+echo "broker_module=$NAG_INSTALL/lib/mk-livestatus/livestatus.o $NAG_INSTALL/var/rw/live" >> $NAG_INSTALL/etc/nagios.cfg
+echo 'event_broker_options=-1' >> $NAG_INSTALL/etc/nagios.cfg
+cd
+rm -rf mk-livestatus-1.2.8 mk-livestatus-1.2.8.tar.gz
+
+
+service httpd stop
+service httpd start
+service nagios start
+
+htpasswd -c $NAG_INSTALL/etc/htpasswd.users nagiosadmin

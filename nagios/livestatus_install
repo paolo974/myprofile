@@ -1,0 +1,14 @@
+NAG_INSTALL=/app/nagios
+cd
+#yum install libstdc++-static libstdc++-static
+#yum install -y make gcc-c++
+wget 'http://www.mathias-kettner.de/download/mk-livestatus-1.2.8.tar.gz'
+tar xzf mk-livestatus-1.2.8.tar.gz
+cd mk-livestatus-1.2.8
+./configure --with-nagios4 --prefix=$NAG_INSTALL
+make -j 4
+make install
+echo "broker_module=$NAG_INSTALL/lib/mk-livestatus/livestatus.o /usr/local/nagios/var/rw/live" >> $NAG_INSTALL/etc/nagios.cfg
+echo 'event_broker_options=-1' >> $NAG_INSTALL/etc/nagios.cfg
+cd
+rm -rf mk-livestatus-1.2.8 mk-livestatus-1.2.8.tar.gz
