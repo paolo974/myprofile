@@ -58,3 +58,5 @@ service httpd start
 service nagios start
 
 htpasswd -c $NAG_INSTALL/etc/htpasswd.users nagiosadmin
+
+#nrpe install - https://support.nagios.com/kb/article.php?id=515#CentOS
