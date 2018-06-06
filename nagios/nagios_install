@@ -1,6 +1,4 @@
-
-
-#yum install -y wget httpd php gcc glibc glibc-common gd gd-devel make net-snmp unzip
+yum install -y wget httpd php gcc glibc glibc-common gd gd-devel make net-snmp unzip 
 NAG_INSTALL=/app/nagios
 cd
 wget https://assets.nagios.com/downloads/nagioscore/releases/nagios-4.3.2.tar.gz
@@ -41,8 +39,8 @@ rm -rf nagios-plugins-2.1.1 nagios-plugins-2.1.1.tar.gz
 
 
 cd
-#yum install libstdc++-static 
-#yum install -y make gcc-c++
+yum -y install libstdc++-static 
+yum -y install -y make gcc-c++
 wget 'http://www.mathias-kettner.de/download/mk-livestatus-1.2.8.tar.gz'
 tar xzf mk-livestatus-1.2.8.tar.gz
 cd mk-livestatus-1.2.8
