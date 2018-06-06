@@ -7,7 +7,7 @@ wget https://assets.nagios.com/downloads/nagioscore/releases/nagios-4.3.2.tar.gz
 tar -xzvf nagios-4.3.2.tar.gz 
 cd nagios-4.3.2
 
-useradd nagios
+useradd -d $NAG_INSTALL nagios
 groupadd nagcmd
 usermod -a -G nagcmd nagios
 usermod -a -G nagcmd apache
